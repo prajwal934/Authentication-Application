@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Authentication_Application	
+  profiles:
+    active: dev
+
+server:
+  port: 8080
