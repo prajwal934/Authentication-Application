@@ -9,7 +9,7 @@ import com.substring.auth.app.model.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 	
-	Optional<User>  findByEmail(String userEmail);
-	boolean existsByEmail(String userEmail);
+	Optional<User>  findByUserEmail(String userEmail);
+	boolean existsByUserEmail(String userEmail);
 
 }
