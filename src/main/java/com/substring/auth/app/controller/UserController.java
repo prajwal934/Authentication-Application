@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,10 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<ResponseStructure<List<UserDto>>>  getAllUsers() {
 		return userService.getAllUsers();
+	}
+	
+	@GetMapping("/email/{userEmail}")
+	public ResponseEntity<ResponseStructure<UserDto>> getUserByEmail(@PathVariable("userEmail") String userEmail) {
+		return userService.getUserByEmail(userEmail);
 	}
 }

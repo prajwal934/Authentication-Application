@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.substring.auth.app.dto.UserDto;
+import com.substring.auth.app.exceptions.ResourceNotFoundException;
 import com.substring.auth.app.model.Provider;
 import com.substring.auth.app.model.User;
 import com.substring.auth.app.repository.UserRepository;
 import com.substring.auth.app.services.UserService;
 import com.substring.auth.app.utility.ResponseStructure;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,10 +24,12 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+	
 	private final ResponseStructure<UserDto> responseStructure;
 	private final ResponseStructure<List<UserDto>> rs;
 	
 	@Override
+	@Transactional
 	public ResponseEntity<ResponseStructure<UserDto>> registerUser(UserDto userDto) {
 		// TODO Auto-generated method stub
 		if(userDto.getUserEmail() == null || userDto.getUserEmail().isBlank()) {
@@ -52,9 +56,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<UserDto>> getUserByEmail(String userEmail) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    User user = userRepository
+	            .findByUserEmail(userEmail)
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException("User is not found by given emailId"));
+
+	    UserDto userDto = modelMapper.map(user, UserDto.class);
+
+	    return ResponseEntity.ok(
+	            responseStructure.setStatusCode(HttpStatus.OK.value())
+	                    .setMessage("User Data Fetched Successfully!")
+	                    .setData(userDto)
+	    );
 	}
+	
 
 	@Override
 	public ResponseEntity<ResponseStructure<UserDto>> updateUser(UserDto userDto, String userId) {
