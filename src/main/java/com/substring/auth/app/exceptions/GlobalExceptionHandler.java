@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorStructure<String>> handleResourceNotFoundException(ResourceNotFoundException ex){
 		return errorResonse(HttpStatus.NOT_FOUND, ex.getMessage(), "User isn't found with given email id!!");
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure<String>> handleIllegalArgumentException(IllegalArgumentException ex){
+		return errorResonse(HttpStatus.BAD_REQUEST, ex.getMessage(), "Internal Server Error, Please check on code!!");
+	}
 }
